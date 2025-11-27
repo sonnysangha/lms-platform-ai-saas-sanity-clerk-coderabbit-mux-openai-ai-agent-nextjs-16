@@ -1,7 +1,7 @@
 import { BlockContentIcon, BookIcon, PlayIcon, TagIcon } from "@sanity/icons";
 import type { StructureResolver } from "sanity/structure";
 
-export const structure: StructureResolver = (S) =>
+export const structure: StructureResolver = (S, context) =>
   S.list()
     .title("LMS Content")
     .items([
@@ -21,5 +21,31 @@ export const structure: StructureResolver = (S) =>
       S.listItem()
         .title("Categories")
         .icon(TagIcon)
-        .child(S.documentTypeList("category").title("Categories")),
+        .child(
+          S.documentTypeList("category")
+            .title("Categories")
+            .child((categoryId) =>
+              S.list()
+                .title("Category")
+                .items([
+                  S.listItem()
+                    .title("Category Details")
+                    .icon(TagIcon)
+                    .child(
+                      S.document()
+                        .schemaType("category")
+                        .documentId(categoryId)
+                    ),
+                  S.listItem()
+                    .title("Courses in Category")
+                    .icon(BookIcon)
+                    .child(
+                      S.documentList()
+                        .title("Courses")
+                        .filter('_type == "course" && category._ref == $categoryId')
+                        .params({ categoryId })
+                    ),
+                ])
+            )
+        ),
     ]);
