@@ -32,9 +32,7 @@ export const structure: StructureResolver = (S, context) =>
                     .title("Category Details")
                     .icon(TagIcon)
                     .child(
-                      S.document()
-                        .schemaType("category")
-                        .documentId(categoryId)
+                      S.document().schemaType("category").documentId(categoryId)
                     ),
                   S.listItem()
                     .title("Courses in Category")
@@ -42,7 +40,9 @@ export const structure: StructureResolver = (S, context) =>
                     .child(
                       S.documentList()
                         .title("Courses")
-                        .filter('_type == "course" && category._ref == $categoryId')
+                        .filter(
+                          '_type == "course" && category._ref == $categoryId'
+                        )
                         .params({ categoryId })
                     ),
                 ])
