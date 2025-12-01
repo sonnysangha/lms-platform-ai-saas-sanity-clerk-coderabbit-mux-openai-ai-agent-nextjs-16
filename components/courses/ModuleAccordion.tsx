@@ -69,6 +69,11 @@ export function ModuleAccordion({ modules, userId }: ModuleAccordionProps) {
                     {index + 1}
                   </div>
                   <div className="flex-1 text-left min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xs text-zinc-500 uppercase tracking-wider">
+                        Module
+                      </span>
+                    </div>
                     <h3 className="font-semibold text-white">
                       {module.title ?? "Untitled Module"}
                     </h3>
@@ -99,9 +104,9 @@ export function ModuleAccordion({ modules, userId }: ModuleAccordionProps) {
                 </div>
               </AccordionTrigger>
 
-              <AccordionContent className="px-5 pb-4">
-                <div className="space-y-1 ml-12">
-                  {module.lessons?.map((lesson) => {
+              <AccordionContent className="px-5 pb-4 pt-2">
+                <div className="ml-4 border-l-2 border-zinc-800 pl-3 space-y-1">
+                  {module.lessons?.map((lesson, lessonIndex) => {
                     const completed = isLessonCompleted(lesson);
                     const hasVideo = !!lesson.video?.asset?.playbackId;
 
@@ -109,7 +114,7 @@ export function ModuleAccordion({ modules, userId }: ModuleAccordionProps) {
                       <Link
                         key={lesson._id}
                         href={`/lessons/${lesson._id}`}
-                        className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-zinc-800/50 transition-colors group"
+                        className="flex items-center gap-2.5 pl-2 pr-3 py-2 rounded-lg hover:bg-zinc-800/50 transition-colors group"
                       >
                         {completed ? (
                           <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />

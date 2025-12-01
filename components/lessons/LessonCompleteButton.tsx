@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { CheckCircle2, Circle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { toggleLessonCompletion } from "@/app/(app)/lessons/actions";
+import { toggleLessonCompletion } from "@/lib/actions";
 
 interface LessonCompleteButtonProps {
   lessonId: string;

@@ -82,7 +82,12 @@ export function LessonSidebar({
                         {moduleIndex + 1}
                       </span>
                       <div className="min-w-0 flex-1">
-                        <p className="font-medium text-sm text-white truncate">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-zinc-500 uppercase tracking-wider">
+                            Module
+                          </span>
+                        </div>
+                        <p className="font-medium text-sm text-white truncate mt-0.5">
                           {module.title ?? "Untitled Module"}
                         </p>
                         <p className="text-xs text-zinc-500">
@@ -92,9 +97,9 @@ export function LessonSidebar({
                     </div>
                   </AccordionTrigger>
 
-                  <AccordionContent className="pb-2">
-                    <div className="space-y-0.5 px-2">
-                      {module.lessons?.map((lesson) => {
+                  <AccordionContent className="pb-3 pt-1">
+                    <div className="ml-4 border-l-2 border-zinc-800 pl-3 space-y-1">
+                      {module.lessons?.map((lesson, lessonIndex) => {
                         const isActive = lesson._id === currentLessonId;
                         const isCompleted = completedLessonIds.includes(
                           lesson._id
@@ -105,7 +110,7 @@ export function LessonSidebar({
                             key={lesson._id}
                             href={`/lessons/${lesson._id}`}
                             className={cn(
-                              "flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors",
+                              "flex items-center gap-2.5 pl-2 pr-3 py-2 rounded-lg text-sm transition-colors",
                               isActive
                                 ? "bg-violet-500/20 text-violet-300"
                                 : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"

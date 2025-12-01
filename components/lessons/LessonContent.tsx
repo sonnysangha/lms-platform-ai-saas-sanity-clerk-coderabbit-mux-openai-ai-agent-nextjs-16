@@ -1,5 +1,7 @@
 import { PortableText, type PortableTextComponents } from "@portabletext/react";
-import type { PortableTextBlock, TypedObject } from "@portabletext/types";
+import type { TypedObject } from "@portabletext/types";
+import { urlFor } from "@/sanity/lib/image";
+import Image from "next/image";
 
 const components: PortableTextComponents = {
   block: {
@@ -60,6 +62,39 @@ const components: PortableTextComponents = {
         {children}
       </a>
     ),
+  },
+  types: {
+    image: ({ value }) => {
+      if (!value?.asset) {
+        return null;
+      }
+
+      const imageUrl = urlFor(value)
+        .width(1200)
+        .height(675)
+        .fit("max")
+        .auto("format")
+        .url();
+
+      return (
+        <figure className="my-6">
+          <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-zinc-900">
+            <Image
+              src={imageUrl}
+              alt={value.alt || "Lesson image"}
+              fill
+              className="object-contain"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+            />
+          </div>
+          {value.caption && (
+            <figcaption className="text-sm text-zinc-400 mt-2 text-center italic">
+              {value.caption}
+            </figcaption>
+          )}
+        </figure>
+      );
+    },
   },
 };
 

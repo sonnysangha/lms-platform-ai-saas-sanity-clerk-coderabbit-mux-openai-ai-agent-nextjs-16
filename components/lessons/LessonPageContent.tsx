@@ -66,6 +66,8 @@ export function LessonPageContent({ lesson, userId }: LessonPageContentProps) {
     };
   }, [lesson.course?.modules, lesson._id, userId]);
 
+  console.log(lesson.video);
+
   return (
     <div className="flex flex-col lg:flex-row gap-8">
       {/* Sidebar */}
@@ -84,11 +86,13 @@ export function LessonPageContent({ lesson, userId }: LessonPageContentProps) {
         {hasAccess ? (
           <>
             {/* Video Player */}
-            <MuxVideoPlayer
-              playbackId={lesson.video?.asset?.playbackId}
-              title={lesson.title ?? undefined}
-              className="mb-6"
-            />
+            {lesson.video?.asset?.playbackId && (
+              <MuxVideoPlayer
+                playbackId={lesson.video?.asset?.playbackId}
+                title={lesson.title ?? undefined}
+                className="mb-6"
+              />
+            )}
 
             {/* Lesson Header */}
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">

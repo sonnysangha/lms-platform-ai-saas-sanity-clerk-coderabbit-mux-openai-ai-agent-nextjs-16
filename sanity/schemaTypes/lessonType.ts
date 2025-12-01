@@ -59,6 +59,21 @@ export const lessonType = defineType({
         defineArrayMember({
           type: "block",
         }),
+        defineArrayMember({
+          type: "image",
+          fields: [
+            defineField({
+              name: "caption",
+              type: "string",
+              description: "Optional caption for the image",
+            }),
+            defineField({
+              name: "alt",
+              type: "string",
+              description: "Alternative text for accessibility",
+            }),
+          ],
+        }),
         // TODO: Add code blocks once @sanity/code-input is installed
         // defineArrayMember({
         //   type: "code",
