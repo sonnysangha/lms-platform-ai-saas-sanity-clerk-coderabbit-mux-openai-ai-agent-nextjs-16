@@ -68,7 +68,7 @@ function CourseEditorContent({
           value={title ?? ""}
           onChange={(e) => editTitle(e.currentTarget.value)}
           placeholder="Untitled Course"
-          className="text-2xl font-semibold text-white border-none shadow-none px-0 h-auto py-1 focus-visible:ring-0 bg-transparent placeholder:text-zinc-600"
+          className="text-2xl font-semibold text-white border-none shadow-none h-auto py-1 focus-visible:ring-0 bg-transparent placeholder:text-zinc-600"
         />
 
         {/* Description */}
@@ -76,7 +76,7 @@ function CourseEditorContent({
           value={description ?? ""}
           onChange={(e) => editDescription(e.currentTarget.value)}
           placeholder="Add a description..."
-          className="text-zinc-400 border-none shadow-none px-0 resize-none focus-visible:ring-0 bg-transparent placeholder:text-zinc-600 mt-2"
+          className="text-zinc-400 border-none shadow-none resize-none focus-visible:ring-0 bg-transparent placeholder:text-zinc-600 mt-2"
           rows={2}
         />
 
