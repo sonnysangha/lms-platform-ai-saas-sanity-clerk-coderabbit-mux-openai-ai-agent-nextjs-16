@@ -33,8 +33,8 @@ interface SanityReference {
 function ReferenceInputFallback({ label }: { label: string }) {
   return (
     <div className="space-y-2">
-      <Label>{label}</Label>
-      <Skeleton className="h-10 w-full" />
+      <Label className="text-zinc-300">{label}</Label>
+      <Skeleton className="h-10 w-full bg-zinc-800" />
     </div>
   );
 }
@@ -97,17 +97,17 @@ function ReferenceInputField({
 
   return (
     <div className="space-y-2">
-      <Label htmlFor={path}>{label}</Label>
+      <Label htmlFor={path} className="text-zinc-300">{label}</Label>
       <Select value={currentRefId || "__none__"} onValueChange={handleChange}>
-        <SelectTrigger id={path}>
+        <SelectTrigger id={path} className="bg-zinc-800/50 border-zinc-700 text-zinc-300">
           <SelectValue placeholder={placeholder ?? "Select..."} />
         </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="__none__">
-            <span className="text-muted-foreground">None</span>
+        <SelectContent className="bg-zinc-800 border-zinc-700">
+          <SelectItem value="__none__" className="text-zinc-300 focus:bg-zinc-700 focus:text-white">
+            <span className="text-zinc-500">None</span>
           </SelectItem>
           {availableDocuments?.map((doc) => (
-            <SelectItem key={doc.documentId} value={doc.documentId}>
+            <SelectItem key={doc.documentId} value={doc.documentId} className="text-zinc-300 focus:bg-zinc-700 focus:text-white">
               <Suspense fallback={doc.documentId}>
                 <ReferenceOption {...doc} />
               </Suspense>

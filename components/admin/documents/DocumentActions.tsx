@@ -12,7 +12,6 @@ import {
   useDocument,
   useQuery,
 } from "@sanity/sdk-react";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Upload, Trash2, Download, RotateCcw } from "lucide-react";
 
@@ -33,10 +32,10 @@ interface DocumentActionsProps extends DocumentHandle {}
 function DocumentActionsFallback() {
   return (
     <div className="flex items-center justify-between w-full">
-      <Skeleton className="h-6 w-16" />
+      <Skeleton className="h-6 w-16 bg-zinc-800" />
       <div className="flex items-center gap-2">
-        <Skeleton className="h-9 w-24" />
-        <Skeleton className="h-9 w-9" />
+        <Skeleton className="h-9 w-24 bg-zinc-800" />
+        <Skeleton className="h-9 w-9 bg-zinc-800" />
       </div>
     </div>
   );
@@ -69,10 +68,6 @@ function DocumentActionsContent({
     perspective: "published",
   });
 
-  // TODO: Make a useEffect which when unpublished, optimistically set hasPublishedVersion to false until publishedDoc is fetched
-
-  console.log("publishedDoc >>>", publishedDoc);
-
   const isDraft = doc?._id.startsWith("drafts.");
   const hasPublishedVersion = !!publishedDoc;
 
@@ -85,18 +80,16 @@ function DocumentActionsContent({
     <div className="flex items-center justify-between w-full">
       {/* Draft badge - only shown when in draft mode */}
       {isDraft && (
-        <span className="px-3 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
-          📝 Draft
+        <span className="px-3 py-1 text-xs font-medium rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">
+          Draft
         </span>
       )}
 
       {/* Action buttons */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 ml-auto">
         {/* Discard changes - only when in draft AND published version exists */}
         {isDraft && hasPublishedVersion && (
-          <Button
-            variant="outline"
-            size="sm"
+          <button
             onClick={() => {
               const confirmed = window.confirm(
                 "Discard all changes? This will revert to the published version.",
@@ -109,17 +102,16 @@ function DocumentActionsContent({
                 }),
               );
             }}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-zinc-400 border border-zinc-700 rounded-lg hover:bg-zinc-800 hover:border-zinc-600 hover:text-zinc-300 transition-colors"
           >
-            <RotateCcw className="h-4 w-4 mr-1.5" />
-            Discard changes
-          </Button>
+            <RotateCcw className="h-4 w-4" />
+            Discard
+          </button>
         )}
 
         {/* Unpublish - only when viewing published version (not draft) */}
         {!isDraft && (
-          <Button
-            variant="outline"
-            size="sm"
+          <button
             onClick={() =>
               apply(
                 unpublishDocument({
@@ -128,17 +120,16 @@ function DocumentActionsContent({
                 }),
               )
             }
-            className="text-gray-700 hover:bg-gray-100"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-zinc-400 border border-zinc-700 rounded-lg hover:bg-zinc-800 hover:border-zinc-600 hover:text-zinc-300 transition-colors"
           >
-            <Download className="h-4 w-4 mr-1.5" />
+            <Download className="h-4 w-4" />
             Unpublish
-          </Button>
+          </button>
         )}
 
         {/* Publish - only when in draft mode */}
         {isDraft && (
-          <Button
-            size="sm"
+          <button
             onClick={() =>
               apply(
                 publishDocument({
@@ -147,17 +138,15 @@ function DocumentActionsContent({
                 }),
               )
             }
-            className="bg-green-600 hover:bg-green-700"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 rounded-lg shadow-lg shadow-violet-500/20 transition-all"
           >
-            <Upload className="h-4 w-4 mr-1.5" />
+            <Upload className="h-4 w-4" />
             Publish
-          </Button>
+          </button>
         )}
 
         {/* Delete button */}
-        <Button
-          variant="ghost"
-          size="icon"
+        <button
           onClick={() => {
             const confirmed = window.confirm(
               "Delete this document permanently? This cannot be undone.",
@@ -172,11 +161,11 @@ function DocumentActionsContent({
             );
             router.push(getListUrl());
           }}
-          className="h-9 w-9 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+          className="h-8 w-8 inline-flex items-center justify-center text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
           title="Delete"
         >
           <Trash2 className="h-4 w-4" />
-        </Button>
+        </button>
       </div>
     </div>
   );

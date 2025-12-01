@@ -32,10 +32,10 @@ interface MuxVideo {
 
 function LessonEditorFallback() {
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <Skeleton className="h-12 w-2/3" />
-      <Skeleton className="h-20 w-full" />
-      <Skeleton className="h-16 w-full" />
+    <div className="space-y-6">
+      <Skeleton className="h-12 w-2/3 bg-zinc-800" />
+      <Skeleton className="h-20 w-full bg-zinc-800" />
+      <Skeleton className="h-16 w-full bg-zinc-800" />
     </div>
   );
 }
@@ -72,19 +72,19 @@ function LessonEditorContent({
   const studioVideoUrl = `/studio/structure/lesson;${documentId},video`;
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div>
       <div className="flex items-center justify-end mb-3">
         <OpenInStudio handle={handle} />
       </div>
 
       {/* Header section */}
-      <div className="bg-background rounded-xl border shadow-sm p-6 mb-6">
+      <div className="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6 mb-6">
         {/* Title input */}
         <Input
           value={title ?? ""}
           onChange={(e) => editTitle(e.currentTarget.value)}
           placeholder="Untitled Lesson"
-          className="text-2xl font-semibold border-none shadow-none px-0 h-auto py-1 focus-visible:ring-0 bg-transparent placeholder:text-muted-foreground/40"
+          className="text-2xl font-semibold text-white border-none shadow-none px-0 h-auto py-1 focus-visible:ring-0 bg-transparent placeholder:text-zinc-600"
         />
 
         {/* Description */}
@@ -92,12 +92,12 @@ function LessonEditorContent({
           value={description ?? ""}
           onChange={(e) => editDescription(e.currentTarget.value)}
           placeholder="Add a description..."
-          className="text-muted-foreground border-none shadow-none px-0 resize-none focus-visible:ring-0 bg-transparent placeholder:text-muted-foreground/30 mt-2"
+          className="text-zinc-400 border-none shadow-none px-0 resize-none focus-visible:ring-0 bg-transparent placeholder:text-zinc-600 mt-2"
           rows={2}
         />
 
         {/* Slug */}
-        <div className="mt-4 pt-4 border-t">
+        <div className="mt-4 pt-4 border-t border-zinc-800">
           <SlugInput
             {...handle}
             path="slug"
@@ -107,37 +107,45 @@ function LessonEditorContent({
         </div>
 
         {/* Actions */}
-        <div className="flex items-center justify-end mt-4 pt-4 border-t">
+        <div className="flex items-center justify-end mt-4 pt-4 border-t border-zinc-800">
           <DocumentActions {...handle} />
         </div>
       </div>
 
       {/* Video status section - compact */}
-      <div className="bg-background rounded-xl border shadow-sm p-4">
+      <div className="bg-zinc-900/50 rounded-xl border border-zinc-800 p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-muted/50">
-              <VideoIcon className="h-5 w-5 text-muted-foreground" />
+            <div className="p-2 rounded-lg bg-zinc-800">
+              <VideoIcon className="h-5 w-5 text-zinc-400" />
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-medium text-sm">Video</span>
+              <span className="font-medium text-sm text-white">Video</span>
               {hasVideo ? (
                 <Badge
                   variant="secondary"
-                  className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
+                  className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                 >
                   <CheckCircle2 className="h-3 w-3 mr-1" />
                   Uploaded
                 </Badge>
               ) : (
-                <Badge variant="secondary" className="text-muted-foreground">
+                <Badge
+                  variant="secondary"
+                  className="bg-zinc-800 text-zinc-400 border border-zinc-700"
+                >
                   <XCircle className="h-3 w-3 mr-1" />
                   No video
                 </Badge>
               )}
             </div>
           </div>
-          <Button variant="outline" size="sm" asChild>
+          <Button
+            variant="outline"
+            size="sm"
+            asChild
+            className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white"
+          >
             <Link href={studioVideoUrl} target="_blank">
               <ExternalLink className="h-4 w-4 mr-2" />
               {hasVideo ? "Manage in Studio" : "Upload in Studio"}

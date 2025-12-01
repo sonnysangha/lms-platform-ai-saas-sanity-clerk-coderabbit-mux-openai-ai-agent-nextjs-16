@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { useDocument, type DocumentHandle } from "@sanity/sdk-react";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Card } from "@/components/ui/card";
 import { ImageIcon } from "lucide-react";
 
 interface ImageInputProps extends DocumentHandle {
@@ -23,8 +22,8 @@ interface SanityImageAsset {
 function ImageInputFallback({ label }: { label: string }) {
   return (
     <div className="space-y-2">
-      <Label>{label}</Label>
-      <Skeleton className="h-32 w-full" />
+      <Label className="text-zinc-300">{label}</Label>
+      <Skeleton className="h-32 w-full bg-zinc-800" />
     </div>
   );
 }
@@ -37,20 +36,20 @@ function ImageInputField({ path, label, ...handle }: ImageInputProps) {
 
   return (
     <div className="space-y-2">
-      <Label>{label}</Label>
-      <Card className="p-4">
+      <Label className="text-zinc-300">{label}</Label>
+      <div className="p-4 rounded-lg border border-zinc-700 bg-zinc-800/30">
         {hasImage ? (
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2 text-sm text-zinc-400">
               <ImageIcon className="h-4 w-4" />
               <span>Image uploaded</span>
             </div>
-            <p className="text-xs text-muted-foreground break-all">
+            <p className="text-xs text-zinc-500 break-all">
               Asset: {image.asset?._ref}
             </p>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-6 text-muted-foreground">
+          <div className="flex flex-col items-center justify-center py-6 text-zinc-500">
             <ImageIcon className="h-10 w-10 mb-2" />
             <p className="text-sm">No image uploaded</p>
             <p className="text-xs mt-1">
@@ -58,7 +57,7 @@ function ImageInputField({ path, label, ...handle }: ImageInputProps) {
             </p>
           </div>
         )}
-      </Card>
+      </div>
     </div>
   );
 }
@@ -70,5 +69,3 @@ export function ImageInput(props: ImageInputProps) {
     </Suspense>
   );
 }
-
-

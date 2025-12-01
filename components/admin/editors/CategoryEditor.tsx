@@ -18,10 +18,10 @@ interface CategoryEditorProps {
 
 function CategoryEditorFallback() {
   return (
-    <div className="max-w-xl mx-auto space-y-6">
-      <Skeleton className="h-12 w-2/3" />
-      <Skeleton className="h-20 w-full" />
-      <Skeleton className="h-24 w-full" />
+    <div className="max-w-2xl space-y-6">
+      <Skeleton className="h-12 w-2/3 bg-zinc-800" />
+      <Skeleton className="h-20 w-full bg-zinc-800" />
+      <Skeleton className="h-24 w-full bg-zinc-800" />
     </div>
   );
 }
@@ -52,19 +52,19 @@ function CategoryEditorContent({
   const editIcon = useEditDocument<string>({ ...handle, path: "icon" });
 
   return (
-    <div className="max-w-xl mx-auto">
+    <div className="max-w-2xl">
       <div className="flex items-center justify-end mb-3">
         <OpenInStudio handle={handle} />
       </div>
 
       {/* Main card */}
-      <div className="bg-background rounded-xl border shadow-sm p-6">
+      <div className="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6">
         {/* Title input */}
         <Input
           value={title ?? ""}
           onChange={(e) => editTitle(e.currentTarget.value)}
           placeholder="Untitled Category"
-          className="text-2xl font-semibold border-none shadow-none px-0 h-auto py-1 focus-visible:ring-0 bg-transparent placeholder:text-muted-foreground/40"
+          className="text-2xl font-semibold text-white border-none shadow-none px-0 h-auto py-1 focus-visible:ring-0 bg-transparent placeholder:text-zinc-600"
         />
 
         {/* Description */}
@@ -72,25 +72,28 @@ function CategoryEditorContent({
           value={description ?? ""}
           onChange={(e) => editDescription(e.currentTarget.value)}
           placeholder="Add a description..."
-          className="text-muted-foreground border-none shadow-none px-0 resize-none focus-visible:ring-0 bg-transparent placeholder:text-muted-foreground/30 mt-2"
+          className="text-zinc-400 border-none shadow-none px-0 resize-none focus-visible:ring-0 bg-transparent placeholder:text-zinc-600 mt-2"
           rows={2}
         />
 
         {/* Actions */}
-        <div className="flex items-center justify-end mt-4 pt-4 border-t">
+        <div className="flex items-center justify-end mt-4 pt-4 border-t border-zinc-800">
           <DocumentActions {...handle} />
         </div>
 
         {/* Icon field */}
-        <div className="mt-6 pt-6 border-t space-y-2">
-          <Label htmlFor="icon">Icon</Label>
+        <div className="mt-6 pt-6 border-t border-zinc-800 space-y-2">
+          <Label htmlFor="icon" className="text-zinc-300">
+            Icon
+          </Label>
           <Input
             id="icon"
             value={icon ?? ""}
             onChange={(e) => editIcon(e.currentTarget.value)}
             placeholder="lucide icon name (e.g., code, palette)"
+            className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500"
           />
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-zinc-500">
             Use any icon name from lucide-react
           </p>
         </div>

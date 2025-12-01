@@ -8,6 +8,7 @@ import {
   PlayCircle,
   Tag,
   LayoutDashboard,
+  Code2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import AdminLogOutButton from "./AdminLogOutButton";
@@ -29,17 +30,17 @@ function AdminHeader() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+    <header className="sticky top-0 z-50 border-b border-zinc-800 bg-zinc-900/80 backdrop-blur-xl">
       <div className="flex h-14 items-center px-6">
         {/* Logo */}
         <Link
           href="/admin"
-          className="flex items-center gap-2 font-semibold mr-8"
+          className="flex items-center gap-2.5 font-semibold mr-8"
         >
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <BookOpen className="h-4 w-4" />
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-600 shadow-lg shadow-violet-500/20">
+            <Code2 className="h-4 w-4 text-white" />
           </div>
-          <span className="text-lg">Admin</span>
+          <span className="text-lg text-white">Admin</span>
         </Link>
 
         {/* Navigation */}
@@ -54,8 +55,8 @@ function AdminHeader() {
                 className={cn(
                   "flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md transition-colors",
                   active
-                    ? "bg-secondary text-secondary-foreground"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/50",
+                    ? "bg-violet-500/20 text-violet-300"
+                    : "text-zinc-400 hover:text-white hover:bg-zinc-800/50",
                 )}
               >
                 <Icon className="h-4 w-4" />
@@ -72,7 +73,7 @@ function AdminHeader() {
         <div className="flex items-center gap-4">
           <Link
             href="/studio"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="text-sm text-zinc-400 hover:text-white transition-colors"
           >
             Open Studio
           </Link>

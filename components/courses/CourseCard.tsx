@@ -20,7 +20,8 @@ export interface CourseCardProps
     | "moduleCount"
     | "lessonCount"
   > {
-  slug: { current: string };
+  slug?: { current: string } | null;
+  href?: string;
   completedLessonCount?: number | null;
   isCompleted?: boolean;
   isLocked?: boolean;
@@ -29,6 +30,7 @@ export interface CourseCardProps
 
 export function CourseCard({
   slug,
+  href,
   title,
   description,
   tier,
@@ -47,8 +49,10 @@ export function CourseCard({
   const progressPercent =
     totalLessons > 0 ? (completed / totalLessons) * 100 : 0;
 
+  const linkHref = href ?? `/courses/${slug?.current ?? ""}`;
+
   return (
-    <Link href={`/courses/${slug.current}`} className="group block">
+    <Link href={linkHref} className="group block">
       <div className="relative rounded-2xl bg-zinc-900/50 border border-zinc-800 overflow-hidden hover:border-zinc-700 transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/5">
         {/* Course thumbnail/header */}
         <div

@@ -32,8 +32,8 @@ interface SelectInputProps extends DocumentHandle {
 function SelectInputFallback({ label }: { label: string }) {
   return (
     <div className="space-y-2">
-      <Label>{label}</Label>
-      <Skeleton className="h-10 w-full" />
+      <Label className="text-zinc-300">{label}</Label>
+      <Skeleton className="h-10 w-full bg-zinc-800" />
     </div>
   );
 }
@@ -52,7 +52,7 @@ function SelectInputField({
   if (options.length <= 4) {
     return (
       <div className="space-y-3">
-        <Label>{label}</Label>
+        <Label className="text-zinc-300">{label}</Label>
         <RadioGroup
           value={(value as string) ?? ""}
           onValueChange={(newValue) => editValue(newValue)}
@@ -63,10 +63,11 @@ function SelectInputField({
               <RadioGroupItem
                 value={option.value}
                 id={`${path}-${option.value}`}
+                className="border-zinc-600 text-violet-500"
               />
               <Label
                 htmlFor={`${path}-${option.value}`}
-                className="font-normal cursor-pointer"
+                className="font-normal cursor-pointer text-zinc-300"
               >
                 {option.label}
               </Label>
@@ -80,17 +81,17 @@ function SelectInputField({
   // Use Select dropdown for more than 4 options
   return (
     <div className="space-y-2">
-      <Label htmlFor={path}>{label}</Label>
+      <Label htmlFor={path} className="text-zinc-300">{label}</Label>
       <Select
         value={(value as string) ?? ""}
         onValueChange={(newValue) => editValue(newValue)}
       >
-        <SelectTrigger id={path}>
+        <SelectTrigger id={path} className="bg-zinc-800/50 border-zinc-700 text-zinc-300">
           <SelectValue placeholder={placeholder ?? "Select an option"} />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="bg-zinc-800 border-zinc-700">
           {options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
+            <SelectItem key={option.value} value={option.value} className="text-zinc-300 focus:bg-zinc-700 focus:text-white">
               {option.label}
             </SelectItem>
           ))}

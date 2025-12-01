@@ -1,6 +1,7 @@
 "use client";
 
 import { useLogOut } from "@sanity/sdk-react";
+import { LogOut } from "lucide-react";
 
 function AdminLogOutButton() {
   const logout = useLogOut();
@@ -13,8 +14,9 @@ function AdminLogOutButton() {
     <button
       type="button"
       onClick={handleLogout}
-      className="px-4 py-2 bg-red-500 text-white rounded-lg font-medium"
+      className="flex items-center gap-2 px-3 py-1.5 text-sm text-zinc-400 hover:text-white border border-zinc-700 hover:border-zinc-600 rounded-md transition-colors"
     >
+      <LogOut className="h-4 w-4" />
       Logout
     </button>
   );

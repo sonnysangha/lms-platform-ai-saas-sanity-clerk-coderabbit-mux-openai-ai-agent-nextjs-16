@@ -24,10 +24,10 @@ interface CourseEditorProps {
 
 function CourseEditorFallback() {
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
-      <Skeleton className="h-12 w-2/3" />
-      <Skeleton className="h-20 w-full" />
-      <Skeleton className="h-[400px] w-full" />
+    <div className="space-y-6">
+      <Skeleton className="h-12 w-2/3 bg-zinc-800" />
+      <Skeleton className="h-20 w-full bg-zinc-800" />
+      <Skeleton className="h-[400px] w-full bg-zinc-800" />
     </div>
   );
 }
@@ -56,19 +56,19 @@ function CourseEditorContent({
   });
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div>
       <div className="flex items-center justify-end mb-3">
         <OpenInStudio handle={handle} />
       </div>
 
       {/* Header section */}
-      <div className="bg-background rounded-xl border shadow-sm p-6 mb-6">
+      <div className="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6 mb-6">
         {/* Title input */}
         <Input
           value={title ?? ""}
           onChange={(e) => editTitle(e.currentTarget.value)}
           placeholder="Untitled Course"
-          className="text-2xl font-semibold border-none shadow-none px-0 h-auto py-1 focus-visible:ring-0 bg-transparent placeholder:text-muted-foreground/40"
+          className="text-2xl font-semibold text-white border-none shadow-none px-0 h-auto py-1 focus-visible:ring-0 bg-transparent placeholder:text-zinc-600"
         />
 
         {/* Description */}
@@ -76,12 +76,12 @@ function CourseEditorContent({
           value={description ?? ""}
           onChange={(e) => editDescription(e.currentTarget.value)}
           placeholder="Add a description..."
-          className="text-muted-foreground border-none shadow-none px-0 resize-none focus-visible:ring-0 bg-transparent placeholder:text-muted-foreground/30 mt-2"
+          className="text-zinc-400 border-none shadow-none px-0 resize-none focus-visible:ring-0 bg-transparent placeholder:text-zinc-600 mt-2"
           rows={2}
         />
 
         {/* Actions */}
-        <div className="flex items-center justify-end mt-4 pt-4 border-t">
+        <div className="flex items-center justify-end mt-4 pt-4 border-t border-zinc-800">
           <DocumentActions {...handle} />
         </div>
       </div>
@@ -89,7 +89,7 @@ function CourseEditorContent({
       {/* Two column layout */}
       <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
         {/* Main: Modules */}
-        <div className="bg-background rounded-xl border shadow-sm p-6">
+        <div className="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6">
           <ModuleAccordionInput
             documentId={documentId}
             documentType="course"
@@ -101,7 +101,7 @@ function CourseEditorContent({
         </div>
 
         {/* Sidebar: Settings */}
-        <div className="bg-background rounded-xl border shadow-sm p-6 space-y-5 h-fit">
+        <div className="bg-zinc-900/50 rounded-xl border border-zinc-800 p-6 space-y-5 h-fit">
           <ImageInput {...handle} path="thumbnail" label="Thumbnail" />
           <ReferenceInput
             {...handle}

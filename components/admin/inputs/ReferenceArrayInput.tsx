@@ -58,8 +58,8 @@ interface SanityReference {
 function ReferenceArrayInputFallback({ label }: { label: string }) {
   return (
     <div className="space-y-2">
-      <Label>{label}</Label>
-      <Skeleton className="h-24 w-full" />
+      <Label className="text-zinc-300">{label}</Label>
+      <Skeleton className="h-24 w-full bg-zinc-800" />
     </div>
   );
 }
@@ -109,13 +109,13 @@ function SortableReferenceItem({
     <div
       ref={setNodeRef}
       style={style}
-      className={`flex items-center gap-2 p-3 bg-muted/50 rounded-lg ${
+      className={`flex items-center gap-2 p-3 bg-zinc-800/50 border border-zinc-700 rounded-lg ${
         isDragging ? "opacity-50 shadow-lg" : ""
       }`}
     >
       <button
         type="button"
-        className="cursor-grab active:cursor-grabbing touch-none text-muted-foreground hover:text-foreground"
+        className="cursor-grab active:cursor-grabbing touch-none text-zinc-500 hover:text-zinc-300"
         {...attributes}
         {...listeners}
       >
@@ -123,7 +123,7 @@ function SortableReferenceItem({
       </button>
       <Link
         href={editUrl}
-        className="text-sm flex-1 hover:text-primary hover:underline transition-colors flex items-center gap-2"
+        className="text-sm text-zinc-300 flex-1 hover:text-violet-400 hover:underline transition-colors flex items-center gap-2"
       >
         {title}
         <ExternalLink className="h-3 w-3 opacity-50" />
@@ -131,7 +131,7 @@ function SortableReferenceItem({
       <Button
         variant="ghost"
         size="icon"
-        className="h-6 w-6"
+        className="h-6 w-6 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-700"
         onClick={onRemove}
       >
         <X className="h-4 w-4" />
@@ -240,11 +240,11 @@ function ReferenceArrayInputField({
 
   return (
     <div className="space-y-3">
-      <Label>{label}</Label>
+      <Label className="text-zinc-300">{label}</Label>
 
       {/* Current references list with drag-and-drop */}
       {refs.length > 0 ? (
-        <Card className="p-2">
+        <div className="p-2 rounded-lg border border-zinc-700 bg-zinc-800/30">
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -261,10 +261,10 @@ function ReferenceArrayInputField({
                     <Suspense
                       key={id}
                       fallback={
-                        <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
-                          <GripVertical className="h-4 w-4 text-muted-foreground" />
-                          <Skeleton className="h-4 w-32 flex-1" />
-                          <Skeleton className="h-6 w-6" />
+                        <div className="flex items-center gap-2 p-3 bg-zinc-800/50 border border-zinc-700 rounded-lg">
+                          <GripVertical className="h-4 w-4 text-zinc-500" />
+                          <Skeleton className="h-4 w-32 flex-1 bg-zinc-700" />
+                          <Skeleton className="h-6 w-6 bg-zinc-700" />
                         </div>
                       }
                     >
@@ -282,21 +282,21 @@ function ReferenceArrayInputField({
               </div>
             </SortableContext>
           </DndContext>
-        </Card>
+        </div>
       ) : (
-        <p className="text-sm text-muted-foreground py-2">No items added yet</p>
+        <p className="text-sm text-zinc-500 py-2">No items added yet</p>
       )}
 
       {/* Add new reference */}
       {availableToAdd && availableToAdd.length > 0 && (
         <div className="flex gap-2">
           <Select value={selectedToAdd} onValueChange={setSelectedToAdd}>
-            <SelectTrigger className="flex-1">
+            <SelectTrigger className="flex-1 bg-zinc-800/50 border-zinc-700 text-zinc-300">
               <SelectValue placeholder={`Add ${referenceType}...`} />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-zinc-800 border-zinc-700">
               {availableToAdd.map((doc) => (
-                <SelectItem key={doc.documentId} value={doc.documentId}>
+                <SelectItem key={doc.documentId} value={doc.documentId} className="text-zinc-300 focus:bg-zinc-700 focus:text-white">
                   <Suspense fallback={doc.documentId}>
                     <AvailableDocumentOption {...doc} />
                   </Suspense>
@@ -304,7 +304,7 @@ function ReferenceArrayInputField({
               ))}
             </SelectContent>
           </Select>
-          <Button onClick={handleAdd} disabled={!selectedToAdd} size="icon">
+          <Button onClick={handleAdd} disabled={!selectedToAdd} size="icon" className="bg-violet-600 hover:bg-violet-500 text-white">
             <Plus className="h-4 w-4" />
           </Button>
         </div>

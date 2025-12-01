@@ -70,8 +70,8 @@ interface SanityReference {
 function ModuleAccordionInputFallback({ label }: { label: string }) {
   return (
     <div className="space-y-2">
-      <Label>{label}</Label>
-      <Skeleton className="h-24 w-full" />
+      <Label className="text-zinc-300">{label}</Label>
+      <Skeleton className="h-24 w-full bg-zinc-800" />
     </div>
   );
 }
@@ -119,22 +119,22 @@ function SortableLessonItem({
     <div
       ref={setNodeRef}
       style={style}
-      className={`flex items-center gap-2 p-2.5 bg-background border rounded-md ${
+      className={`flex items-center gap-2 p-2.5 bg-zinc-800/50 border border-zinc-700 rounded-md ${
         isDragging ? "opacity-50 shadow-lg z-50" : ""
       }`}
     >
       <button
         type="button"
-        className="cursor-grab active:cursor-grabbing touch-none text-muted-foreground hover:text-foreground"
+        className="cursor-grab active:cursor-grabbing touch-none text-zinc-500 hover:text-zinc-300"
         {...attributes}
         {...listeners}
       >
         <GripVertical className="h-3.5 w-3.5" />
       </button>
-      <PlayCircle className="h-3.5 w-3.5 text-muted-foreground" />
+      <PlayCircle className="h-3.5 w-3.5 text-emerald-400" />
       <Link
         href={editUrl}
-        className="text-sm flex-1 hover:text-primary hover:underline transition-colors flex items-center gap-1.5"
+        className="text-sm text-zinc-300 flex-1 hover:text-violet-400 hover:underline transition-colors flex items-center gap-1.5"
       >
         {title}
         <ExternalLink className="h-3 w-3 opacity-50" />
@@ -142,7 +142,7 @@ function SortableLessonItem({
       <Button
         variant="ghost"
         size="icon"
-        className="h-5 w-5"
+        className="h-5 w-5 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-700"
         onClick={(e) => {
           e.stopPropagation();
           onRemove();
@@ -278,11 +278,11 @@ function ModuleAccordionItemContent({
       style={style}
       className={`${isDragging ? "opacity-50 shadow-lg z-50" : ""}`}
     >
-      <AccordionItem value={id} className="border rounded-lg px-1 mb-2">
+      <AccordionItem value={id} className="border border-zinc-700 rounded-lg px-1 mb-2 bg-zinc-800/30">
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="cursor-grab active:cursor-grabbing touch-none text-muted-foreground hover:text-foreground pl-2"
+            className="cursor-grab active:cursor-grabbing touch-none text-zinc-500 hover:text-zinc-300 pl-2"
             {...attributes}
             {...listeners}
           >
@@ -290,9 +290,9 @@ function ModuleAccordionItemContent({
           </button>
           <AccordionTrigger className="flex-1 hover:no-underline py-3">
             <div className="flex items-center gap-2">
-              <Layers className="h-4 w-4 text-muted-foreground" />
-              <span>{title}</span>
-              <span className="text-xs text-muted-foreground">
+              <Layers className="h-4 w-4 text-cyan-400" />
+              <span className="text-zinc-200">{title}</span>
+              <span className="text-xs text-zinc-500">
                 ({lessons.length} lesson{lessons.length !== 1 ? "s" : ""})
               </span>
             </div>
@@ -300,15 +300,15 @@ function ModuleAccordionItemContent({
           <div className="flex items-center gap-1 pr-2">
             <Link
               href={editUrl}
-              className="p-1.5 hover:bg-muted rounded-md transition-colors"
+              className="p-1.5 hover:bg-zinc-700 rounded-md transition-colors"
               onClick={(e) => e.stopPropagation()}
             >
-              <ExternalLink className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
+              <ExternalLink className="h-3.5 w-3.5 text-zinc-500 hover:text-zinc-300" />
             </Link>
             <Button
               variant="ghost"
               size="icon"
-              className="h-7 w-7"
+              className="h-7 w-7 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-700"
               onClick={(e) => {
                 e.stopPropagation();
                 onRemoveModule();
@@ -337,9 +337,9 @@ function ModuleAccordionItemContent({
                       <Suspense
                         key={lessonId}
                         fallback={
-                          <div className="flex items-center gap-2 p-2.5 bg-background border rounded-md">
-                            <GripVertical className="h-3.5 w-3.5 text-muted-foreground" />
-                            <Skeleton className="h-4 w-32 flex-1" />
+                          <div className="flex items-center gap-2 p-2.5 bg-zinc-800/50 border border-zinc-700 rounded-md">
+                            <GripVertical className="h-3.5 w-3.5 text-zinc-500" />
+                            <Skeleton className="h-4 w-32 flex-1 bg-zinc-700" />
                           </div>
                         }
                       >
@@ -357,7 +357,7 @@ function ModuleAccordionItemContent({
               </SortableContext>
             </DndContext>
           ) : (
-            <p className="text-xs text-muted-foreground py-2 pl-1">
+            <p className="text-xs text-zinc-500 py-2 pl-1">
               No lessons in this module
             </p>
           )}
@@ -369,12 +369,12 @@ function ModuleAccordionItemContent({
                 value={selectedLessonToAdd}
                 onValueChange={setSelectedLessonToAdd}
               >
-                <SelectTrigger className="flex-1 h-8 text-xs">
+                <SelectTrigger className="flex-1 h-8 text-xs bg-zinc-800/50 border-zinc-700 text-zinc-300">
                   <SelectValue placeholder="Add lesson..." />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-zinc-800 border-zinc-700">
                   {availableLessons.map((doc) => (
-                    <SelectItem key={doc.documentId} value={doc.documentId}>
+                    <SelectItem key={doc.documentId} value={doc.documentId} className="text-zinc-300 focus:bg-zinc-700 focus:text-white">
                       <Suspense fallback={doc.documentId}>
                         <LessonOptionLabel {...doc} />
                       </Suspense>
@@ -386,7 +386,7 @@ function ModuleAccordionItemContent({
                 onClick={handleAddLesson}
                 disabled={!selectedLessonToAdd}
                 size="sm"
-                className="h-8 w-8 p-0"
+                className="h-8 w-8 p-0 bg-violet-600 hover:bg-violet-500 text-white"
               >
                 <Plus className="h-3.5 w-3.5" />
               </Button>
@@ -530,7 +530,7 @@ function ModuleAccordionInputField({
 
   return (
     <div className="space-y-3">
-      <Label>{label}</Label>
+      <Label className="text-zinc-300">{label}</Label>
 
       {/* Modules accordion list with drag-and-drop */}
       {modules.length > 0 ? (
@@ -554,9 +554,9 @@ function ModuleAccordionInputField({
                   <Suspense
                     key={moduleId}
                     fallback={
-                      <div className="flex items-center gap-2 p-3 border rounded-lg mb-2">
-                        <GripVertical className="h-4 w-4 text-muted-foreground" />
-                        <Skeleton className="h-4 w-32 flex-1" />
+                      <div className="flex items-center gap-2 p-3 border border-zinc-700 rounded-lg mb-2 bg-zinc-800/30">
+                        <GripVertical className="h-4 w-4 text-zinc-500" />
+                        <Skeleton className="h-4 w-32 flex-1 bg-zinc-700" />
                       </div>
                     }
                   >
@@ -574,7 +574,7 @@ function ModuleAccordionInputField({
           </SortableContext>
         </DndContext>
       ) : (
-        <p className="text-sm text-muted-foreground py-2">
+        <p className="text-sm text-zinc-500 py-2">
           No modules added yet
         </p>
       )}
@@ -586,12 +586,12 @@ function ModuleAccordionInputField({
             value={selectedModuleToAdd}
             onValueChange={setSelectedModuleToAdd}
           >
-            <SelectTrigger className="flex-1">
+            <SelectTrigger className="flex-1 bg-zinc-800/50 border-zinc-700 text-zinc-300">
               <SelectValue placeholder="Add module..." />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-zinc-800 border-zinc-700">
               {availableToAdd.map((doc) => (
-                <SelectItem key={doc.documentId} value={doc.documentId}>
+                <SelectItem key={doc.documentId} value={doc.documentId} className="text-zinc-300 focus:bg-zinc-700 focus:text-white">
                   <Suspense fallback={doc.documentId}>
                     <ModuleOptionLabel {...doc} />
                   </Suspense>
@@ -603,6 +603,7 @@ function ModuleAccordionInputField({
             onClick={handleAddModule}
             disabled={!selectedModuleToAdd}
             size="icon"
+            className="bg-violet-600 hover:bg-violet-500 text-white"
           >
             <Plus className="h-4 w-4" />
           </Button>
