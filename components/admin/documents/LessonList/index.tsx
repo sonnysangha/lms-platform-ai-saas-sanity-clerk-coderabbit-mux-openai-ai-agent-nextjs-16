@@ -58,4 +58,3 @@ export function LessonList({ projectId, dataset }: LessonListProps) {
 }
 
 export type { LessonListProps } from "./types";
-

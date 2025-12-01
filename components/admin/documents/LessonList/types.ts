@@ -28,4 +28,3 @@ export interface CourseModulesData {
 }
 
 export type LessonItemProps = DocumentHandle & { index?: number };
-
