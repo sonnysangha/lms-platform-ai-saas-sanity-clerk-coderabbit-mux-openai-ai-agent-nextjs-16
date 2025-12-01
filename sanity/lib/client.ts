@@ -10,11 +10,12 @@ export const client = createClient({
   perspective: "previewDrafts",
 });
 
-// Write client for mutations (requires SANITY_API_WRITE_TOKEN env var)
+// Write client for mutations - server-side only
+// Requires SANITY_API_WRITE_TOKEN env var with Editor or higher permissions
 export const writeClient = createClient({
   projectId,
   dataset,
   apiVersion,
   useCdn: false,
-  token: process.env.NEXT_PUBLIC_SANITY_API_WRITE_TOKEN,
+  token: process.env.SANITY_API_WRITE_TOKEN,
 });

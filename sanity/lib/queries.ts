@@ -71,3 +71,118 @@ export const STATS_QUERY = defineQuery(`{
   "courseCount": count(*[_type == "course"]),
   "lessonCount": count(*[_type == "lesson"])
 }`);
+
+export const DASHBOARD_COURSES_QUERY = defineQuery(`*[
+  _type == "course"
+] | order(_createdAt desc) {
+  _id,
+  title,
+  description,
+  tier,
+  featured,
+  thumbnail {
+    asset-> {
+      _id,
+      url
+    }
+  },
+  category-> {
+    _id,
+    title
+  },
+  "moduleCount": count(modules),
+  "lessonCount": count(modules[]->lessons[])
+}`);
+
+export const COURSE_WITH_MODULES_QUERY = defineQuery(`*[
+  _type == "course"
+  && _id == $id
+][0] {
+  _id,
+  title,
+  description,
+  tier,
+  featured,
+  thumbnail {
+    asset-> {
+      _id,
+      url
+    }
+  },
+  category-> {
+    _id,
+    title
+  },
+  modules[]-> {
+    _id,
+    title,
+    description,
+    completedBy,
+    lessons[]-> {
+      _id,
+      title,
+      description,
+      completedBy,
+      video {
+        asset-> {
+          playbackId
+        }
+      }
+    }
+  },
+  completedBy,
+  "moduleCount": count(modules),
+  "lessonCount": count(modules[]->lessons[]),
+  "completedLessonCount": count(modules[]->lessons[]->completedBy[@ == $userId])
+}`);
+
+export const LESSON_BY_ID_QUERY = defineQuery(`*[
+  _type == "lesson"
+  && _id == $id
+][0] {
+  _id,
+  title,
+  description,
+  video {
+    asset-> {
+      playbackId,
+      status,
+      data {
+        duration
+      }
+    }
+  },
+  content,
+  completedBy,
+  "course": *[_type == "course" && ^._id in modules[]->lessons[]->_id][0] {
+    _id,
+    title,
+    tier,
+    modules[]-> {
+      _id,
+      title,
+      lessons[]-> {
+        _id,
+        title,
+        completedBy
+      }
+    }
+  }
+}`);
+
+export const LESSON_NAVIGATION_QUERY = defineQuery(`*[
+  _type == "course"
+  && $lessonId in modules[]->lessons[]->_id
+][0] {
+  _id,
+  title,
+  tier,
+  modules[]-> {
+    _id,
+    title,
+    lessons[]-> {
+      _id,
+      title
+    }
+  }
+}`);

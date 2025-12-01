@@ -27,6 +27,36 @@ export function getTierColorClasses(color: TierColor) {
   return TIER_COLOR_MAP[color];
 }
 
+// Tier styling constants for UI components
+export const TIER_STYLES: Record<
+  Tier,
+  {
+    gradient: string;
+    border: string;
+    text: string;
+    badge: string;
+  }
+> = {
+  free: {
+    gradient: "from-emerald-500 to-teal-600",
+    border: "border-emerald-500/30",
+    text: "text-emerald-400",
+    badge: "bg-emerald-500/90 text-white",
+  },
+  pro: {
+    gradient: "from-violet-500 to-fuchsia-600",
+    border: "border-violet-500/30",
+    text: "text-violet-400",
+    badge: "bg-violet-500/90 text-white",
+  },
+  ultra: {
+    gradient: "from-cyan-400 to-blue-600",
+    border: "border-cyan-500/30",
+    text: "text-cyan-400",
+    badge: "bg-cyan-500/90 text-white",
+  },
+};
+
 export const TIER_FEATURES = [
   {
     tier: "Free",
