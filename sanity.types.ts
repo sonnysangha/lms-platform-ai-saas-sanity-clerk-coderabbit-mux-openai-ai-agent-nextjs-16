@@ -614,7 +614,7 @@ export type COURSE_WITH_MODULES_QUERYResult = {
 
 // Source: ./sanity/lib/queries.ts
 // Variable: LESSON_BY_ID_QUERY
-// Query: *[  _type == "lesson"  && _id == $id][0] {  _id,  title,  slug,  description,  video {    asset-> {      playbackId,      status,      data {        duration      }    }  },  content,  completedBy,  "course": *[_type == "course" && ^._id in modules[]->lessons[]->_id][0] {    _id,    title,    slug,    tier,    modules[]-> {      _id,      title,      lessons[]-> {        _id,        title,        slug,        completedBy      }    }  }}
+// Query: *[  _type == "lesson"  && _id == $id][0] {  _id,  title,  slug,  description,  video {    asset-> {      playbackId,      status,      data {        duration      }    }  },  content,  completedBy,  "courses": *[_type == "course" && ^._id in modules[]->lessons[]->_id] | order(    select(tier == "free" => 0, tier == "pro" => 1, tier == "ultra" => 2)  ) {    _id,    title,    slug,    tier,    modules[]-> {      _id,      title,      lessons[]-> {        _id,        title,        slug,        completedBy      }    }  }}
 export type LESSON_BY_ID_QUERYResult = {
   _id: string;
   title: string | null;
@@ -673,7 +673,7 @@ export type LESSON_BY_ID_QUERYResult = {
       }
   > | null;
   completedBy: Array<string> | null;
-  course: {
+  courses: Array<{
     _id: string;
     title: string | null;
     slug: Slug | null;
@@ -688,12 +688,12 @@ export type LESSON_BY_ID_QUERYResult = {
         completedBy: Array<string> | null;
       }> | null;
     }> | null;
-  } | null;
+  }>;
 } | null;
 
 // Source: ./sanity/lib/queries.ts
 // Variable: LESSON_BY_SLUG_QUERY
-// Query: *[  _type == "lesson"  && slug.current == $slug][0] {  _id,  title,  slug,  description,  video {    asset-> {      playbackId,      status,      data {        duration      }    }  },  content,  completedBy,  "course": *[_type == "course" && ^._id in modules[]->lessons[]->_id][0] {    _id,    title,    slug,    tier,    modules[]-> {      _id,      title,      lessons[]-> {        _id,        title,        slug,        completedBy      }    }  }}
+// Query: *[  _type == "lesson"  && slug.current == $slug][0] {  _id,  title,  slug,  description,  video {    asset-> {      playbackId,      status,      data {        duration      }    }  },  content,  completedBy,  "courses": *[_type == "course" && ^._id in modules[]->lessons[]->_id] | order(    select(tier == "free" => 0, tier == "pro" => 1, tier == "ultra" => 2)  ) {    _id,    title,    slug,    tier,    modules[]-> {      _id,      title,      lessons[]-> {        _id,        title,        slug,        completedBy      }    }  }}
 export type LESSON_BY_SLUG_QUERYResult = {
   _id: string;
   title: string | null;
@@ -752,7 +752,7 @@ export type LESSON_BY_SLUG_QUERYResult = {
       }
   > | null;
   completedBy: Array<string> | null;
-  course: {
+  courses: Array<{
     _id: string;
     title: string | null;
     slug: Slug | null;
@@ -767,7 +767,7 @@ export type LESSON_BY_SLUG_QUERYResult = {
         completedBy: Array<string> | null;
       }> | null;
     }> | null;
-  } | null;
+  }>;
 } | null;
 
 // Source: ./sanity/lib/queries.ts
@@ -796,8 +796,8 @@ declare module "@sanity/client" {
     '{\n  "courseCount": count(*[_type == "course"]),\n  "lessonCount": count(*[_type == "lesson"])\n}': STATS_QUERYResult;
     '*[\n  _type == "course"\n] | order(_createdAt desc) {\n  _id,\n  title,\n  slug,\n  description,\n  tier,\n  featured,\n  completedBy,\n  thumbnail {\n    asset-> {\n      _id,\n      url\n    }\n  },\n  category-> {\n    _id,\n    title\n  },\n  modules[]-> {\n    lessons[]-> {\n      completedBy\n    }\n  },\n  "moduleCount": count(modules),\n  "lessonCount": count(modules[]->lessons[])\n}': DASHBOARD_COURSES_QUERYResult;
     '*[\n  _type == "course"\n  && slug.current == $slug\n][0] {\n  _id,\n  title,\n  slug,\n  description,\n  tier,\n  featured,\n  thumbnail {\n    asset-> {\n      _id,\n      url\n    }\n  },\n  category-> {\n    _id,\n    title\n  },\n  modules[]-> {\n    _id,\n    title,\n    description,\n    completedBy,\n    lessons[]-> {\n      _id,\n      title,\n      slug,\n      description,\n      completedBy,\n      video {\n        asset-> {\n          playbackId\n        }\n      }\n    }\n  },\n  completedBy,\n  "moduleCount": count(modules),\n  "lessonCount": count(modules[]->lessons[]),\n  "completedLessonCount": count(modules[]->lessons[]->completedBy[@==$userId])\n}': COURSE_WITH_MODULES_QUERYResult;
-    '*[\n  _type == "lesson"\n  && _id == $id\n][0] {\n  _id,\n  title,\n  slug,\n  description,\n  video {\n    asset-> {\n      playbackId,\n      status,\n      data {\n        duration\n      }\n    }\n  },\n  content,\n  completedBy,\n  "course": *[_type == "course" && ^._id in modules[]->lessons[]->_id][0] {\n    _id,\n    title,\n    slug,\n    tier,\n    modules[]-> {\n      _id,\n      title,\n      lessons[]-> {\n        _id,\n        title,\n        slug,\n        completedBy\n      }\n    }\n  }\n}': LESSON_BY_ID_QUERYResult;
-    '*[\n  _type == "lesson"\n  && slug.current == $slug\n][0] {\n  _id,\n  title,\n  slug,\n  description,\n  video {\n    asset-> {\n      playbackId,\n      status,\n      data {\n        duration\n      }\n    }\n  },\n  content,\n  completedBy,\n  "course": *[_type == "course" && ^._id in modules[]->lessons[]->_id][0] {\n    _id,\n    title,\n    slug,\n    tier,\n    modules[]-> {\n      _id,\n      title,\n      lessons[]-> {\n        _id,\n        title,\n        slug,\n        completedBy\n      }\n    }\n  }\n}': LESSON_BY_SLUG_QUERYResult;
+    '*[\n  _type == "lesson"\n  && _id == $id\n][0] {\n  _id,\n  title,\n  slug,\n  description,\n  video {\n    asset-> {\n      playbackId,\n      status,\n      data {\n        duration\n      }\n    }\n  },\n  content,\n  completedBy,\n  "courses": *[_type == "course" && ^._id in modules[]->lessons[]->_id] | order(\n    select(tier == "free" => 0, tier == "pro" => 1, tier == "ultra" => 2)\n  ) {\n    _id,\n    title,\n    slug,\n    tier,\n    modules[]-> {\n      _id,\n      title,\n      lessons[]-> {\n        _id,\n        title,\n        slug,\n        completedBy\n      }\n    }\n  }\n}': LESSON_BY_ID_QUERYResult;
+    '*[\n  _type == "lesson"\n  && slug.current == $slug\n][0] {\n  _id,\n  title,\n  slug,\n  description,\n  video {\n    asset-> {\n      playbackId,\n      status,\n      data {\n        duration\n      }\n    }\n  },\n  content,\n  completedBy,\n  "courses": *[_type == "course" && ^._id in modules[]->lessons[]->_id] | order(\n    select(tier == "free" => 0, tier == "pro" => 1, tier == "ultra" => 2)\n  ) {\n    _id,\n    title,\n    slug,\n    tier,\n    modules[]-> {\n      _id,\n      title,\n      lessons[]-> {\n        _id,\n        title,\n        slug,\n        completedBy\n      }\n    }\n  }\n}': LESSON_BY_SLUG_QUERYResult;
     '*[\n  _type == "course"\n  && $lessonId in modules[]->lessons[]->_id\n][0] {\n  _id,\n  title,\n  tier,\n  modules[]-> {\n    _id,\n    title,\n    lessons[]-> {\n      _id,\n      title\n    }\n  }\n}': LESSON_NAVIGATION_QUERYResult;
   }
 }
@@ -811,8 +811,8 @@ declare module "groq" {
     '{\n  "courseCount": count(*[_type == "course"]),\n  "lessonCount": count(*[_type == "lesson"])\n}': STATS_QUERYResult;
     '*[\n  _type == "course"\n] | order(_createdAt desc) {\n  _id,\n  title,\n  slug,\n  description,\n  tier,\n  featured,\n  completedBy,\n  thumbnail {\n    asset-> {\n      _id,\n      url\n    }\n  },\n  category-> {\n    _id,\n    title\n  },\n  modules[]-> {\n    lessons[]-> {\n      completedBy\n    }\n  },\n  "moduleCount": count(modules),\n  "lessonCount": count(modules[]->lessons[])\n}': DASHBOARD_COURSES_QUERYResult;
     '*[\n  _type == "course"\n  && slug.current == $slug\n][0] {\n  _id,\n  title,\n  slug,\n  description,\n  tier,\n  featured,\n  thumbnail {\n    asset-> {\n      _id,\n      url\n    }\n  },\n  category-> {\n    _id,\n    title\n  },\n  modules[]-> {\n    _id,\n    title,\n    description,\n    completedBy,\n    lessons[]-> {\n      _id,\n      title,\n      slug,\n      description,\n      completedBy,\n      video {\n        asset-> {\n          playbackId\n        }\n      }\n    }\n  },\n  completedBy,\n  "moduleCount": count(modules),\n  "lessonCount": count(modules[]->lessons[]),\n  "completedLessonCount": count(modules[]->lessons[]->completedBy[@==$userId])\n}': COURSE_WITH_MODULES_QUERYResult;
-    '*[\n  _type == "lesson"\n  && _id == $id\n][0] {\n  _id,\n  title,\n  slug,\n  description,\n  video {\n    asset-> {\n      playbackId,\n      status,\n      data {\n        duration\n      }\n    }\n  },\n  content,\n  completedBy,\n  "course": *[_type == "course" && ^._id in modules[]->lessons[]->_id][0] {\n    _id,\n    title,\n    slug,\n    tier,\n    modules[]-> {\n      _id,\n      title,\n      lessons[]-> {\n        _id,\n        title,\n        slug,\n        completedBy\n      }\n    }\n  }\n}': LESSON_BY_ID_QUERYResult;
-    '*[\n  _type == "lesson"\n  && slug.current == $slug\n][0] {\n  _id,\n  title,\n  slug,\n  description,\n  video {\n    asset-> {\n      playbackId,\n      status,\n      data {\n        duration\n      }\n    }\n  },\n  content,\n  completedBy,\n  "course": *[_type == "course" && ^._id in modules[]->lessons[]->_id][0] {\n    _id,\n    title,\n    slug,\n    tier,\n    modules[]-> {\n      _id,\n      title,\n      lessons[]-> {\n        _id,\n        title,\n        slug,\n        completedBy\n      }\n    }\n  }\n}': LESSON_BY_SLUG_QUERYResult;
+    '*[\n  _type == "lesson"\n  && _id == $id\n][0] {\n  _id,\n  title,\n  slug,\n  description,\n  video {\n    asset-> {\n      playbackId,\n      status,\n      data {\n        duration\n      }\n    }\n  },\n  content,\n  completedBy,\n  "courses": *[_type == "course" && ^._id in modules[]->lessons[]->_id] | order(\n    select(tier == "free" => 0, tier == "pro" => 1, tier == "ultra" => 2)\n  ) {\n    _id,\n    title,\n    slug,\n    tier,\n    modules[]-> {\n      _id,\n      title,\n      lessons[]-> {\n        _id,\n        title,\n        slug,\n        completedBy\n      }\n    }\n  }\n}': LESSON_BY_ID_QUERYResult;
+    '*[\n  _type == "lesson"\n  && slug.current == $slug\n][0] {\n  _id,\n  title,\n  slug,\n  description,\n  video {\n    asset-> {\n      playbackId,\n      status,\n      data {\n        duration\n      }\n    }\n  },\n  content,\n  completedBy,\n  "courses": *[_type == "course" && ^._id in modules[]->lessons[]->_id] | order(\n    select(tier == "free" => 0, tier == "pro" => 1, tier == "ultra" => 2)\n  ) {\n    _id,\n    title,\n    slug,\n    tier,\n    modules[]-> {\n      _id,\n      title,\n      lessons[]-> {\n        _id,\n        title,\n        slug,\n        completedBy\n      }\n    }\n  }\n}': LESSON_BY_SLUG_QUERYResult;
     '*[\n  _type == "course"\n  && $lessonId in modules[]->lessons[]->_id\n][0] {\n  _id,\n  title,\n  tier,\n  modules[]-> {\n    _id,\n    title,\n    lessons[]-> {\n      _id,\n      title\n    }\n  }\n}': LESSON_NAVIGATION_QUERYResult;
   }
 }

@@ -12,7 +12,8 @@ import {
 import type { LESSON_BY_ID_QUERYResult } from "@/sanity.types";
 
 // Infer types from Sanity query result
-type CourseModules = NonNullable<NonNullable<LESSON_BY_ID_QUERYResult>["course"]>["modules"];
+type Course = NonNullable<LESSON_BY_ID_QUERYResult>["courses"][number];
+type CourseModules = Course["modules"];
 type Module = NonNullable<CourseModules>[number];
 type Lesson = NonNullable<Module["lessons"]>[number];
 

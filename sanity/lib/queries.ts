@@ -200,7 +200,9 @@ export const LESSON_BY_ID_QUERY = defineQuery(`*[
   },
   content,
   completedBy,
-  "course": *[_type == "course" && ^._id in modules[]->lessons[]->_id][0] {
+  "courses": *[_type == "course" && ^._id in modules[]->lessons[]->_id] | order(
+    select(tier == "free" => 0, tier == "pro" => 1, tier == "ultra" => 2)
+  ) {
     _id,
     title,
     slug,
@@ -237,7 +239,9 @@ export const LESSON_BY_SLUG_QUERY = defineQuery(`*[
   },
   content,
   completedBy,
-  "course": *[_type == "course" && ^._id in modules[]->lessons[]->_id][0] {
+  "courses": *[_type == "course" && ^._id in modules[]->lessons[]->_id] | order(
+    select(tier == "free" => 0, tier == "pro" => 1, tier == "ultra" => 2)
+  ) {
     _id,
     title,
     slug,

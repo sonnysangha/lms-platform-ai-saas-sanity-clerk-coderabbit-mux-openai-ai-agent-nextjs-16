@@ -98,11 +98,7 @@ function LessonEditorContent({
             <h3 className="text-sm font-medium text-zinc-400 mb-4">
               Lesson Content
             </h3>
-            <PortableTextInput
-              {...handle}
-              path="content"
-              label="Content"
-            />
+            <PortableTextInput {...handle} path="content" label="Content" />
           </div>
         </div>
 

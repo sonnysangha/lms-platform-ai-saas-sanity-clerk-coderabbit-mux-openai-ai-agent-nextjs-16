@@ -19,9 +19,16 @@ interface LessonPageContentProps {
 export function LessonPageContent({ lesson, userId }: LessonPageContentProps) {
   const userTier = useUserTier();
 
-  // Check if user has access based on course tier
-  const courseTier = lesson.course?.tier;
-  const hasAccess = hasTierAccess(userTier, courseTier);
+  // Find the first course the user has access to (courses are sorted by tier: free, pro, ultra)
+  // This allows users to access lessons if they have access to ANY course containing the lesson
+  const courses = lesson.courses ?? [];
+  const accessibleCourse = courses.find((course) =>
+    hasTierAccess(userTier, course.tier)
+  );
+  const hasAccess = !!accessibleCourse;
+
+  // Use the accessible course for navigation, or fall back to the first course for gated fallback
+  const activeCourse = accessibleCourse ?? courses[0];
 
   // Check if user has completed this lesson
   const isCompleted = userId
@@ -29,7 +36,7 @@ export function LessonPageContent({ lesson, userId }: LessonPageContentProps) {
     : false;
 
   // Find previous and next lessons for navigation
-  const modules = lesson.course?.modules;
+  const modules = activeCourse?.modules;
   let prevLesson: { id: string; slug: string; title: string } | null = null;
   let nextLesson: { id: string; slug: string; title: string } | null = null;
   const completedLessonIds: string[] = [];
@@ -63,11 +70,11 @@ export function LessonPageContent({ lesson, userId }: LessonPageContentProps) {
   return (
     <div className="flex flex-col lg:flex-row gap-8">
       {/* Sidebar */}
-      {lesson.course && hasAccess && (
+      {activeCourse && hasAccess && (
         <LessonSidebar
-          courseSlug={lesson.course.slug!.current!}
-          courseTitle={lesson.course.title}
-          modules={lesson.course.modules ?? null}
+          courseSlug={activeCourse.slug!.current!}
+          courseTitle={activeCourse.title}
+          modules={activeCourse.modules ?? null}
           currentLessonId={lesson._id}
           completedLessonIds={completedLessonIds}
         />
@@ -148,7 +155,7 @@ export function LessonPageContent({ lesson, userId }: LessonPageContentProps) {
             </div>
           </>
         ) : (
-          <GatedFallback requiredTier={courseTier} />
+          <GatedFallback requiredTier={activeCourse?.tier} />
         )}
       </div>
     </div>
