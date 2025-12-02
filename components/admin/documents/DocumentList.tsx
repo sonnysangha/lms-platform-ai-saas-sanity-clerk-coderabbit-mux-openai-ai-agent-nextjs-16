@@ -8,6 +8,7 @@ import {
   useDocumentProjection,
   useApplyDocumentActions,
   createDocument,
+  createDocumentHandle,
   type DocumentHandle,
 } from "@sanity/sdk-react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -142,15 +143,13 @@ export function DocumentList({
 
   const handleCreateDocument = () => {
     startTransition(async () => {
-      const result = await apply(
-        createDocument({
-          documentType,
-        }),
-      );
-      const created = Array.isArray(result) ? result[0] : result;
-      if (created?.id) {
-        router.push(`${basePath}/${created.id}`);
-      }
+      const newDocHandle = createDocumentHandle({
+        documentId: crypto.randomUUID(),
+        documentType,
+      });
+
+      await apply(createDocument(newDocHandle));
+      router.push(`${basePath}/${newDocHandle.documentId}`);
     });
   };
 

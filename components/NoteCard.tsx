@@ -11,6 +11,7 @@ import {
   discardDocument,
   useDocumentEvent,
   createDocumentHandle,
+  useQuery,
 } from "@sanity/sdk-react";
 import type { Note } from "@/sanity.types";
 
@@ -37,6 +38,14 @@ export function NoteCard({ documentId }: NoteCardProps) {
   // Check if document is published or draft in realtime
   const isDraft = note?._id.startsWith("drafts.");
   const isPublished = !isDraft;
+
+  // Check if a published version exists (for draft-only documents)
+  const { data: publishedDoc } = useQuery<{ _id: string } | null>({
+    query: `*[_id == $id][0]{ _id }`,
+    params: { id: documentId },
+    perspective: "published",
+  });
+  const hasPublishedVersion = !!publishedDoc;
 
   // Listen to document events
   useDocumentEvent({
@@ -188,18 +197,32 @@ export function NoteCard({ documentId }: NoteCardProps) {
         )}
         <button
           type="button"
-          onClick={() => {
-            if (isDraft) {
-              // For drafts, use discardDocument
-              apply(
+          onClick={async () => {
+            const baseId = note._id.replace("drafts.", "");
+
+            if (isDraft && hasPublishedVersion) {
+              // For drafts with published version, discard to revert
+              await apply(
                 discardDocument({
-                  documentId: note._id.replace("drafts.", ""),
+                  documentId: baseId,
                   documentType: "note",
                 }),
               );
+            } else if (isDraft && !hasPublishedVersion) {
+              // For draft-only documents (no published version), publish first then delete
+              await apply([
+                publishDocument({
+                  documentId: baseId,
+                  documentType: "note",
+                }),
+                deleteDocument({
+                  documentId: baseId,
+                  documentType: "note",
+                }),
+              ]);
             } else {
               // For published documents, use deleteDocument
-              apply(
+              await apply(
                 deleteDocument({
                   documentId: note._id,
                   documentType: "note",
@@ -209,7 +232,7 @@ export function NoteCard({ documentId }: NoteCardProps) {
           }}
           className="px-2 py-1 text-xs bg-red-100 hover:bg-red-200 text-red-800 rounded ml-auto"
         >
-          {isDraft ? "Discard Draft" : "Delete"}
+          {isDraft && hasPublishedVersion ? "Discard Draft" : "Delete"}
         </button>
       </div>
 

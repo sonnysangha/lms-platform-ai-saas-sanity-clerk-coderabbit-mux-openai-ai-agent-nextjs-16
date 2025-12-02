@@ -2,7 +2,11 @@
 
 import { Suspense, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { useApplyDocumentActions, createDocument } from "@sanity/sdk-react";
+import {
+  useApplyDocumentActions,
+  createDocument,
+  createDocumentHandle,
+} from "@sanity/sdk-react";
 import { ListPageHeader, SearchInput } from "@/components/admin/shared";
 import { DocumentGridSkeleton } from "@/components/admin/shared/DocumentSkeleton";
 import { CourseGrid } from "./CourseGrid";
@@ -16,15 +20,13 @@ export function CourseList({ projectId, dataset }: CourseListProps) {
 
   const handleCreateCourse = () => {
     startTransition(async () => {
-      const result = await apply(
-        createDocument({
-          documentType: "course",
-        }),
-      );
-      const created = Array.isArray(result) ? result[0] : result;
-      if (created?.id) {
-        router.push(`/admin/courses/${created.id}`);
-      }
+      const newDocHandle = createDocumentHandle({
+        documentId: crypto.randomUUID(),
+        documentType: "course",
+      });
+
+      await apply(createDocument(newDocHandle));
+      router.push(`/admin/courses/${newDocHandle.documentId}`);
     });
   };
 
@@ -58,4 +60,3 @@ export function CourseList({ projectId, dataset }: CourseListProps) {
 }
 
 export type { CourseListProps } from "./types";
-

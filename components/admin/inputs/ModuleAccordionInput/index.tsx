@@ -1,11 +1,7 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import {
-  useDocument,
-  useEditDocument,
-  useDocuments,
-} from "@sanity/sdk-react";
+import { useDocument, useEditDocument, useDocuments } from "@sanity/sdk-react";
 import {
   DndContext,
   closestCenter,
@@ -127,7 +123,9 @@ function ModuleAccordionInputField({
   };
 
   const handleRemoveModule = (moduleRef: string) => {
-    editModules(modules.filter((m) => m._ref !== moduleRef) as SanityReference[]);
+    editModules(
+      modules.filter((m) => m._ref !== moduleRef) as SanityReference[],
+    );
   };
 
   const moduleSortableIds = modules.map((m) => m._key ?? m._ref);
@@ -228,4 +226,3 @@ export function ModuleAccordionInput(props: ModuleAccordionInputProps) {
 }
 
 export type { ModuleAccordionInputProps } from "./types";
-

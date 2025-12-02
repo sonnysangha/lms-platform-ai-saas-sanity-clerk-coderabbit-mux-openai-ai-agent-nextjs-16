@@ -12,7 +12,6 @@ import {
   Tag,
   ArrowRight,
   Plus,
-  Clock,
   TrendingUp,
   Zap,
   ExternalLink,
@@ -146,76 +145,6 @@ function QuickActionLink({
   );
 }
 
-function RecentDocumentsContent({ documentType }: { documentType: string }) {
-  const { data: documents } = useDocuments({
-    documentType,
-    projectId,
-    dataset,
-  });
-
-  const typeConfig: Record<
-    string,
-    { icon: React.ComponentType<{ className?: string }>; color: string }
-  > = {
-    course: { icon: BookOpen, color: "text-violet-400" },
-    module: { icon: Layers, color: "text-cyan-400" },
-    lesson: { icon: PlayCircle, color: "text-emerald-400" },
-  };
-
-  const config = typeConfig[documentType] || {
-    icon: BookOpen,
-    color: "text-zinc-400",
-  };
-  const Icon = config.icon;
-
-  // Get first 2 documents
-  const recentDocs = (documents || []).slice(0, 2);
-
-  if (recentDocs.length === 0) return null;
-
-  return (
-    <>
-      {recentDocs.map((doc) => (
-        <Link
-          key={doc.documentId}
-          href={`/admin/${documentType}s/${doc.documentId}`}
-          className="flex items-center gap-3 p-3 rounded-lg hover:bg-zinc-800/50 transition-colors group"
-        >
-          <Icon className={`h-4 w-4 ${config.color}`} />
-          <div className="flex-1 min-w-0">
-            <p className="text-sm text-zinc-300 truncate group-hover:text-white transition-colors">
-              {(doc as unknown as { title?: string }).title || "Untitled"}
-            </p>
-            <p className="text-xs text-zinc-600">{documentType}</p>
-          </div>
-        </Link>
-      ))}
-    </>
-  );
-}
-
-function RecentActivityContent() {
-  return (
-    <div className="space-y-1">
-      <Suspense
-        fallback={<Skeleton className="h-12 w-full bg-zinc-800 rounded" />}
-      >
-        <RecentDocumentsContent documentType="course" />
-      </Suspense>
-      <Suspense
-        fallback={<Skeleton className="h-12 w-full bg-zinc-800 rounded" />}
-      >
-        <RecentDocumentsContent documentType="module" />
-      </Suspense>
-      <Suspense
-        fallback={<Skeleton className="h-12 w-full bg-zinc-800 rounded" />}
-      >
-        <RecentDocumentsContent documentType="lesson" />
-      </Suspense>
-    </div>
-  );
-}
-
 function ContentHealthContent() {
   const { data: courses } = useDocuments({
     documentType: "course",
@@ -328,10 +257,10 @@ export default function AdminDashboard() {
         ))}
       </div>
 
-      {/* Quick Actions & Recent Activity */}
-      <div className="grid gap-6 lg:grid-cols-3">
+      {/* Quick Actions & Content Health */}
+      <div className="grid gap-6 lg:grid-cols-2">
         {/* Quick Actions */}
-        <div className="lg:col-span-1 space-y-4">
+        <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Zap className="h-5 w-5 text-amber-400" />
             <h2 className="text-lg font-semibold text-white">Quick Actions</h2>
@@ -368,34 +297,8 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Recent Activity */}
-        <div className="lg:col-span-1 space-y-4">
-          <div className="flex items-center gap-2">
-            <Clock className="h-5 w-5 text-cyan-400" />
-            <h2 className="text-lg font-semibold text-white">Recent Content</h2>
-          </div>
-          <div className="rounded-xl bg-zinc-900/30 border border-zinc-800 p-4 min-h-[200px]">
-            <Suspense
-              fallback={
-                <div className="space-y-3">
-                  {["skel-1", "skel-2", "skel-3", "skel-4", "skel-5"].map(
-                    (id) => (
-                      <div key={id} className="flex items-center gap-3">
-                        <Skeleton className="h-4 w-4 bg-zinc-800 rounded" />
-                        <Skeleton className="h-4 flex-1 bg-zinc-800 rounded" />
-                      </div>
-                    ),
-                  )}
-                </div>
-              }
-            >
-              <RecentActivityContent />
-            </Suspense>
-          </div>
-        </div>
-
         {/* Content Health */}
-        <div className="lg:col-span-1 space-y-4">
+        <div className="space-y-4">
           <div className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-emerald-400" />
             <h2 className="text-lg font-semibold text-white">Content Health</h2>

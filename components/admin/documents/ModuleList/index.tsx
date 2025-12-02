@@ -2,7 +2,11 @@
 
 import { Suspense, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { useApplyDocumentActions, createDocument } from "@sanity/sdk-react";
+import {
+  useApplyDocumentActions,
+  createDocument,
+  createDocumentHandle,
+} from "@sanity/sdk-react";
 import { ListPageHeader, SearchInput } from "@/components/admin/shared";
 import { ModuleListSkeleton } from "@/components/admin/shared/DocumentSkeleton";
 import { ModuleListContent } from "./ModuleListContent";
@@ -16,15 +20,13 @@ export function ModuleList({ projectId, dataset }: ModuleListProps) {
 
   const handleCreateModule = () => {
     startTransition(async () => {
-      const result = await apply(
-        createDocument({
-          documentType: "module",
-        }),
-      );
-      const created = Array.isArray(result) ? result[0] : result;
-      if (created?.id) {
-        router.push(`/admin/modules/${created.id}`);
-      }
+      const newDocHandle = createDocumentHandle({
+        documentId: crypto.randomUUID(),
+        documentType: "module",
+      });
+
+      await apply(createDocument(newDocHandle));
+      router.push(`/admin/modules/${newDocHandle.documentId}`);
     });
   };
 

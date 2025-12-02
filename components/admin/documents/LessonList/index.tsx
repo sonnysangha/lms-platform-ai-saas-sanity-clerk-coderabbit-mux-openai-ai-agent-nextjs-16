@@ -2,7 +2,11 @@
 
 import { Suspense, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { useApplyDocumentActions, createDocument } from "@sanity/sdk-react";
+import {
+  useApplyDocumentActions,
+  createDocument,
+  createDocumentHandle,
+} from "@sanity/sdk-react";
 import { ListPageHeader, SearchInput } from "@/components/admin/shared";
 import { HierarchicalListSkeleton } from "@/components/admin/shared/DocumentSkeleton";
 import { LessonListContent } from "./LessonListContent";
@@ -16,15 +20,13 @@ export function LessonList({ projectId, dataset }: LessonListProps) {
 
   const handleCreateLesson = () => {
     startTransition(async () => {
-      const result = await apply(
-        createDocument({
-          documentType: "lesson",
-        }),
-      );
-      const created = Array.isArray(result) ? result[0] : result;
-      if (created?.id) {
-        router.push(`/admin/lessons/${created.id}`);
-      }
+      const newDocHandle = createDocumentHandle({
+        documentId: crypto.randomUUID(),
+        documentType: "lesson",
+      });
+
+      await apply(createDocument(newDocHandle));
+      router.push(`/admin/lessons/${newDocHandle.documentId}`);
     });
   };
 

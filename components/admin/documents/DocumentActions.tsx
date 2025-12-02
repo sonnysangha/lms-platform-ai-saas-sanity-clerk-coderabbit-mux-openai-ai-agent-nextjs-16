@@ -146,18 +146,29 @@ function DocumentActionsContent({
       {/* Delete button */}
       <button
         type="button"
-        onClick={() => {
+        onClick={async () => {
           const confirmed = window.confirm(
             "Delete this document permanently? This cannot be undone.",
           );
           if (!confirmed) return;
 
-          apply(
-            deleteDocument({
-              documentId: baseId,
-              documentType,
-            }),
-          );
+          // If document is draft-only (no published version), publish first then delete
+          // deleteDocument only works on published documents
+          if (isDraft && !hasPublishedVersion) {
+            await apply(
+              discardDocument({
+                documentId: baseId,
+                documentType,
+              }),
+            );
+          } else {
+            await apply(
+              deleteDocument({
+                documentId: baseId,
+                documentType,
+              }),
+            );
+          }
           router.push(getListUrl());
         }}
         className="h-8 w-8 inline-flex items-center justify-center text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
